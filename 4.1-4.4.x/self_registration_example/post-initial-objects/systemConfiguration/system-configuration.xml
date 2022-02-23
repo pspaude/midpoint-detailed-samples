@@ -1,0 +1,29 @@
+<!-- Add this to existing System Configuraiton object! -->
+<infrastructure>
+    <publicHttpUrlPattern>https://mymidpoint.edu/midpoint</publicHttpUrlPattern>
+</infrastructure>
+
+<notificationConfiguration>
+        <handler>
+            <userRegistrationNotifier>
+                <recipientExpression>
+                    <script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="c:ScriptExpressionEvaluatorType">
+                        <code>
+                    return requestee.getEmailAddress()
+                  </code>
+                    </script>
+                </recipientExpression>
+                <transport>mail</transport>
+                <confirmationMethod>link</confirmationMethod>
+            </userRegistrationNotifier>
+        </handler>
+    <!-- This is same mail server config as password reset, add if doesn't already exist. -->
+    <mail>
+        <server>
+        <host>mailhog</host>
+        <port>1025</port>
+        </server>
+        <defaultFrom>adminmail@example.edu</defaultFrom>
+        <debug>true</debug>
+    </mail>
+</notificationConfiguration>
