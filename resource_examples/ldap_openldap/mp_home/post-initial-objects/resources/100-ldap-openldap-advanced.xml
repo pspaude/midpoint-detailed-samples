@@ -70,6 +70,7 @@
             <icfc:enableAttributesToGetSearchResultsHandler>false</icfc:enableAttributesToGetSearchResultsHandler>
         </icfc:resultsHandlerConfiguration>
     </connectorConfiguration>
+
     <schema>
         <generationConstraints>
             <generateObjectClass>ri:inetOrgPerson</generateObjectClass>
