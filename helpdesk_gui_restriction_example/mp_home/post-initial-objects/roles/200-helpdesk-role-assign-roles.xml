@@ -1,6 +1,7 @@
-<role oid="19fa9d56-62ef-4241-b190-f2738e691d97">
-    <name>Helpdesk Modify Users</name>
+<role oid="b67db4c5-46f8-44f3-99fe-065092f9d05a">
+    <name>Helpdesk Assign Roles</name>
     <description>Help Desk employee role</description>
+    <requestable>false</requestable>
     <authorization>
         <name>gui-reviewer-access</name>
         <description>
@@ -13,6 +14,8 @@
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-ui-3#selfDashboard</action>
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-ui-3#selfCredentials</action>
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-ui-3#selfProfile</action>
+        <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-ui-3#adminAssign</action>
+        <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-ui-3#adminUnassign</action>
     </authorization>
     <authorization>
         <name>users-read</name>
@@ -23,6 +26,8 @@
         <object>
             <type>UserType</type>
         </object>
+        <item>assignment</item>
+        <item>roleMembershipRef</item>
         <item>name</item>
         <item>givenName</item>
         <item>familyName</item>
@@ -38,6 +43,8 @@
         <object>
             <type>UserType</type>
         </object>
+        <item>assignment</item>
+        <item>roleMembershipRef</item>
         <item>credentials</item>
         <item>name</item>
         <item>givenName</item>
@@ -50,7 +57,9 @@
 		</description>
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#modify</action>
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#read</action>
-        <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#delete</action>
+        <!-- <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#delete</action> -->
+        <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#assign</action>
+        <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#unassign</action>
         <phase>execution</phase>
         <object>
             <type>UserType</type>
@@ -64,9 +73,20 @@
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#read</action>
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#delete</action>
         <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#add</action>
+        <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#assign</action>
+        <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#unassign</action>
         <phase>execution</phase>
         <object>
             <type>ShadowType</type>
         </object>
+    </authorization>
+    <authorization>
+          <description>Allows assigning/unassigning roles.</description>
+          <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#assign</action>
+          <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#unassign</action>
+          <action>http://midpoint.evolveum.com/xml/ns/public/security/authorization-model-3#read</action>
+          <target>
+              <type>RoleType</type>
+          </target>
     </authorization>
 </role>
