@@ -27,7 +27,7 @@
         </connectorRef>
         <connectorConfiguration xmlns:icfc="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/connector-schema-3">
             <icfc:configurationProperties xmlns:icscscriptedsql="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/bundle/com.evolveum.polygon.connector-scripted-sql/com.evolveum.polygon.connector.scripted.sql.ScriptedSQLConnector">
-                <icscscriptedsql:scriptRoots>/opt/midpoint/var/sql-scripts/grouper-groups/</icscscriptedsql:scriptRoots>
+                <icscscriptedsql:scriptRoots>/opt/midpoint/var/sql-scripts/grouper-groups</icscscriptedsql:scriptRoots>
                 <icscscriptedsql:classpath>.</icscscriptedsql:classpath>
                 <icscscriptedsql:scriptBaseClass>BaseScript</icscscriptedsql:scriptBaseClass>
                 <icscscriptedsql:searchScriptFileName>SearchScript.groovy</icscscriptedsql:searchScriptFileName>

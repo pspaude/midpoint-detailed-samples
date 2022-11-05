@@ -14,7 +14,7 @@
         xmlns:mr="http://prism.evolveum.com/xml/ns/public/matching-rule-3"
         xmlns:cap="http://midpoint.evolveum.com/xml/ns/public/resource/capabilities-3"
         xmlns:mines="http://mines.edu/xml/ns/mySchema">
-    <name>Open LDAP Example</name>
+    <name>Open LDAP Advanced</name>
     <connectorRef type="ConnectorType">
         <filter>
                 <q:equal>
@@ -104,7 +104,7 @@
                                     log.info("-----------------------------employeeNumber is null!")
                                 } else {
                                     log.info("--------------------------LDAP ref ri:dn OUTBOUND username= + employeeNumber.toString()")
-                                    String newDN=basic.composeDnWithSuffix('uid', employeeNumber, midpoint.getConst('minesEduLdapBaseContext'))
+                                    String newDN=basic.composeDnWithSuffix('uid', employeeNumber, "ou=People,dc=myedu,dc=edu")
                                     log.info("--------------------------newDN is " + newDN)
                                     return newDN
                                 }
@@ -285,7 +285,7 @@
                                 import javax.naming.ldap.Rdn
                                 import javax.naming.ldap.LdapName
 
-                                dn = new LdapName('ou=groups,dc=mattbrookover,dc=com')
+                                dn = new LdapName('ou=groups,dc=myedu,dc=edu')
                                 dn.add(new Rdn('cn', username.toString()))
                                 return dn.toString()
                             </code>
