@@ -1,6 +1,6 @@
 # midpoint-detailed-samples
 
-This project contains detailed configuration samples for v4.4 and earlier versions of [midPoint](https://github.com/Evolveum/midpoint).
+This project contains detailed configuration samples for v4.8+ version of [midPoint](https://github.com/Evolveum/midpoint).
 
 You can contribute your own samples at [midPoint-samples](https://github.com/Evolveum/midpoint-samples). See the samples/contrib/README.md at that repo for more information. 
 
