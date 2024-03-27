@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<org xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
-     oid="dd860fc2-a8ae-4657-8f05-9a32adae279b">
-    <name>grouper-groups</name>
-    <displayName>Grouper Groups</displayName>
-</org>

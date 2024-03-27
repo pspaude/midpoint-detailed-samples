@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+          xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+          xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+          xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+          xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+          xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+          xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+          xmlns:extnsn="http://internal.myedu.local/xml/ns/midpoint/schema/extension-3"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          oid="fb0bbf07-e33f-4ddd-85a1-16a7edc237f2">
+    <name>Inbound Grouper Groups</name>
+    <description>Brings in a read-only view of Groups and Memberships provisioned from Grouper specifically for midPoint.</description>
+    <extension>
+        <extnsn:servicecredentialobjectname>midPoint-grouper-integration</extnsn:servicecredentialobjectname> <!-- Links to service object by service object's name! This service object is the config/secret holder for this resource. -->
+    </extension>
+    <connectorRef relation="org:default" type="c:ConnectorType">
+        <filter>
+            <q:equal>
+                <q:path>c:connectorType</q:path>
+                <q:value>com.evolveum.polygon.connector.grouper.GrouperConnector</q:value>
+            </q:equal>
+        </filter>
+    </connectorRef>
+    <!-- The following scripts in each of the configuration properties do the "magic" of getting the service object config and secrets into this resource automatically even after changes.
+      In short, all you need is the above extension property and the scripts on each of the changeable secrets/config (which you can change per resource) as seen below in the configuration properties section.
+       Everything else in this resource is the same as the Grouper_to_midPoint_Inbound_Groups_Example and is unrelated to the Service Object as a Secrets Holder example.
+     -->
+    <connectorConfiguration xmlns:icfc="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/connector-schema-3">
+        <icfc:configurationProperties xmlns:grpconf="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/bundle/com.evolveum.polygon.connector-grouper/com.evolveum.polygon.connector.grouper.GrouperConnector">
+            <grpconf:host>
+                <expression>
+                    <script>
+                        <code>
+                            import com.evolveum.midpoint.xml.ns._public.common.common_3.*
+                            return basic.stringify(basic.getExtensionPropertyValue(midpoint.searchObjectByName(ServiceType.class, basic.getExtensionPropertyValue(resource, "servicecredentialobjectname")), "resourcehost"))
+                        </code>
+                    </script>
+                </expression>
+            </grpconf:host>
+            <grpconf:port>
+                <expression>
+                    <script>
+                        <code>
+                            import com.evolveum.midpoint.xml.ns._public.common.common_3.*
+                            return basic.stringify(basic.getExtensionPropertyValue(midpoint.searchObjectByName(ServiceType.class, basic.getExtensionPropertyValue(resource, "servicecredentialobjectname")), "resourceport"))
+                        </code>
+                    </script>
+                </expression>
+            </grpconf:port>
+            <grpconf:userName>
+                <expression>
+                    <script>
+                        <code>
+                            import com.evolveum.midpoint.xml.ns._public.common.common_3.*
+                            return basic.stringify(basic.getExtensionPropertyValue(midpoint.searchObjectByName(ServiceType.class, basic.getExtensionPropertyValue(resource, "servicecredentialobjectname")), "resourceusername"))
+                        </code>
+                    </script>
+                </expression>
+            </grpconf:userName>
+            <grpconf:password>
+                <expression>
+                    <script>
+                        <code>
+                            import com.evolveum.midpoint.xml.ns._public.common.common_3.*
+                            return midpoint.getPlaintextUserPassword(midpoint.searchObjectByName(ServiceType.class, basic.getExtensionPropertyValue(resource, "servicecredentialobjectname")))
+                        </code>
+                    </script>
+                </expression>
+            </grpconf:password>
+            <grpconf:databaseName>
+                <expression>
+                    <script>
+                        <code>
+                            import com.evolveum.midpoint.xml.ns._public.common.common_3.*
+                            return basic.stringify(basic.getExtensionPropertyValue(midpoint.searchObjectByName(ServiceType.class, basic.getExtensionPropertyValue(resource, "servicecredentialobjectname")), "resourcespecificname"))
+                        </code>
+                    </script>
+                </expression>
+            </grpconf:databaseName>
+            <grpconf:schema>
+                <expression>
+                    <script>
+                        <code>
+                            import com.evolveum.midpoint.xml.ns._public.common.common_3.*
+                            return basic.stringify(basic.getExtensionPropertyValue(midpoint.searchObjectByName(ServiceType.class, basic.getExtensionPropertyValue(resource, "servicecredentialobjectname")), "resourcesubname"))
+                        </code>
+                    </script>
+                </expression>
+            </grpconf:schema>
+            <grpconf:tablePrefix>gr</grpconf:tablePrefix>
+            <grpconf:attrsToHaveInAllSearch>members</grpconf:attrsToHaveInAllSearch>
+            <grpconf:attrsToHaveInAllSearch>member_of</grpconf:attrsToHaveInAllSearch>
+            <grpconf:extendedGroupProperties>emailListName</grpconf:extendedGroupProperties>
+        </icfc:configurationProperties>
+        <icfc:resultsHandlerConfiguration>
+            <icfc:enableNormalizingResultsHandler>false</icfc:enableNormalizingResultsHandler>
+            <icfc:enableFilteredResultsHandler>false</icfc:enableFilteredResultsHandler>
+            <icfc:enableAttributesToGetSearchResultsHandler>false</icfc:enableAttributesToGetSearchResultsHandler>
+        </icfc:resultsHandlerConfiguration>
+    </connectorConfiguration>
+    <schema></schema>
+    <schemaHandling>
+        <objectType>
+            <kind>account</kind>
+            <intent>default</intent>
+            <displayName>Grouper Subject Membership Record</displayName>
+            <default>true</default>
+            <delineation>
+                <objectClass>ri:subject</objectClass>
+            </delineation>
+            <focus>
+                <type>c:UserType</type>
+            </focus>
+            <attribute>
+                <ref>ri:subject_id</ref>
+                <inbound>
+                    <strength>weak</strength>
+                    <target>
+                        <path>extension/grouperSubjectId</path>
+                    </target>
+                </inbound>
+            </attribute>
+            <attribute>
+                <ref>icfs:uid</ref>
+            </attribute>
+            <attribute>
+                <ref>ri:member_of</ref>
+                <fetchStrategy>explicit</fetchStrategy>
+            </attribute>
+            <association>
+                <ref>ri:group</ref>
+                <inbound>
+                    <strength>strong</strength>
+                    <expression>
+                        <assignmentTargetSearch>
+                            <targetType>c:OrgType</targetType>
+                            <filter>
+                                <q:equal>
+                                    <q:path>name</q:path>
+                                    <expression>
+                                        <script>
+                                            <code>
+
+                                                def attrs = entitlement.getAttributes();
+                                                pcvi = attrs.asPrismContainerValue().getItems();
+                                                def groupName;
+
+                                                for (obj in pcvi){
+                                                    if (obj.isSingleValue()){
+
+                                                        if("uid".equals(obj?.getElementName().toString())){
+
+                                                            groupName = obj?.getValue()?.getRealValue()
+                                                            return groupName
+                                                        }
+                                                    }
+                                                }
+                                                return groupName;
+                                            </code>
+                                        </script>
+                                    </expression>
+                                </q:equal>
+                            </filter>
+                            <populate>
+                                <populateItem>
+                                    <expression>
+                                        <value>grouper-group</value>
+                                    </expression>
+                                    <target>
+                                        <path>subtype</path>
+                                    </target>
+                                </populateItem>
+                            </populate>
+                        </assignmentTargetSearch>
+                    </expression>
+                    <target>
+                        <path>assignment</path>
+                        <set>
+                            <condition>
+                                <script>
+                                    <code>
+                                        assignment?.subtype?.contains('grouper-group')
+                                    </code>
+                                </script>
+                            </condition>
+                        </set>
+                    </target>
+                </inbound>
+                <kind>entitlement</kind>
+                <intent>group</intent>
+                <direction>objectToSubject</direction>
+                <associationAttribute>ri:members</associationAttribute>
+                <valueAttribute>icfs:uid</valueAttribute>
+                <shortcutAssociationAttribute>ri:member_of</shortcutAssociationAttribute>
+                <shortcutValueAttribute>icfs:uid</shortcutValueAttribute>
+                <explicitReferentialIntegrity>false</explicitReferentialIntegrity>
+            </association>
+            <correlation>
+                <correlators>
+                    <items>
+                        <name>userSubjectId</name>
+                        <enabled>true</enabled>
+                        <item>
+                            <ref>extension/grouperSubjectId</ref>
+                        </item>
+                    </items>
+                </correlators>
+            </correlation>
+            <synchronization>
+                <reaction>
+                    <situation>unmatched</situation>
+                </reaction>
+                <reaction>
+                    <situation>unlinked</situation>
+                    <actions>
+                        <link>
+                            <synchronize>true</synchronize>
+                        </link>
+                    </actions>
+                </reaction>
+                <reaction>
+                    <situation>linked</situation>
+                    <actions>
+                        <synchronize/>
+                    </actions>
+                </reaction>
+                <reaction>
+                    <situation>deleted</situation>
+                    <actions>
+                        <synchronize/>
+                    </actions>
+                </reaction>
+            </synchronization>
+        </objectType>
+        <objectType>
+            <kind>entitlement</kind>
+            <intent>group</intent>
+            <displayName>Grouper Group</displayName>
+            <default>true</default>
+            <delineation>
+                <objectClass>ri:group</objectClass>
+            </delineation>
+            <focus>
+                <type>c:OrgType</type>
+                <archetypeRef oid="5f2b96d2-49b5-4a8a-9601-14457309a69b" relation="org:default" type="c:ArchetypeType"/>
+            </focus>
+            <attribute>
+                <ref>icfs:uid</ref>
+                <inbound>
+                    <strength>strong</strength>
+                    <target>
+                        <path>$focus/name</path>
+                    </target>
+                </inbound>
+            </attribute>
+            <attribute>
+                <ref>ri:group_name</ref>
+                <inbound>
+                    <target>
+                        <path>$focus/identifier</path>
+                    </target>
+                </inbound>
+            </attribute>
+            <attribute>
+                <ref>ri:display_name</ref>
+                <inbound>
+                    <strength>strong</strength>
+                    <target>
+                        <path>$focus/displayName</path>
+                    </target>
+                </inbound>
+            </attribute>
+            <attribute>
+                <ref>ri:description</ref>
+                <inbound>
+                    <strength>strong</strength>
+                    <target>
+                        <path>$focus/description</path>
+                    </target>
+                </inbound>
+            </attribute>
+            <attribute>
+                <ref>ri:members</ref>
+                <fetchStrategy>explicit</fetchStrategy>
+            </attribute>
+            <correlation>
+                <correlators>
+                    <items>
+                        <name>identifier</name>
+                        <enabled>true</enabled>
+                        <item>
+                            <ref>identifier</ref>
+                        </item>
+                    </items>
+                    <items>
+                        <name>name</name>
+                        <enabled>true</enabled>
+                        <item>
+                            <ref>name</ref>
+                        </item>
+                    </items>
+                </correlators>
+            </correlation>
+            <synchronization>
+                <reaction>
+                    <situation>unmatched</situation>
+                    <actions>
+                        <addFocus>
+                            <synchronize>true</synchronize>
+                        </addFocus>
+                    </actions>
+                </reaction>
+                <reaction>
+                    <situation>unlinked</situation>
+                    <actions>
+                        <link>
+                            <synchronize>true</synchronize>
+                        </link>
+                    </actions>
+                </reaction>
+                <reaction>
+                    <situation>linked</situation>
+                    <actions>
+                        <synchronize/>
+                    </actions>
+                </reaction>
+            </synchronization>
+        </objectType>
+    </schemaHandling>
+    <capabilities>
+        <native xmlns:cap="http://midpoint.evolveum.com/xml/ns/public/resource/capabilities-3">
+            <cap:schema/>
+            <cap:discoverConfiguration/>
+            <cap:liveSync/>
+            <cap:create>
+                <cap:enabled>false</cap:enabled> <!-- Setting CRUD ops false just in case so midPoint doesn't try to write/create, current synchronization and inbound only mappings won't allow that but people can override -->
+            </cap:create>
+            <cap:read>
+                <cap:returnDefaultAttributesOption>true</cap:returnDefaultAttributesOption>
+            </cap:read>
+            <cap:update>
+                <cap:enabled>false</cap:enabled>
+            </cap:update>
+            <cap:delete>
+                <cap:enabled>false</cap:enabled>
+            </cap:delete>
+            <cap:testConnection/>
+            <cap:script>
+                <cap:host>
+                    <cap:type>connector</cap:type>
+                </cap:host>
+            </cap:script>
+        </native>
+    </capabilities>
+</resource>

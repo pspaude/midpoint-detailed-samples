@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+         xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+         xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+         xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+         xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+         xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+         xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:extnsn="http://internal.myedu.local/xml/ns/midpoint/schema/extension-3"
+         oid="33d8d288-dcb4-4cdf-a919-02ac5096dae5" version="1">
+<!-- You would create a new service object following this template per resource or external system group of resources (if secrets/main configs are the same) per deployed midPoint environment.
+ These service objects can be created manually in the GUI or by other systems using REST API.
+  This is a template example, in general the idea is not commit the per environment service secret holder objects to SCM.
+-->
+<name>midpoint-external-resource-integration-template</name> <!-- Name is mapped to the Resource configuration: extension/servicecredentialobjectname -->
+<identifier>midpoint-integration-service</identifier> <!-- Used to map to archetype, add this static/unchanged to all service integration objects created! -->
+<extension>
+    <extnsn:resourcehost>host</extnsn:resourcehost> <!-- Resource hostname -->
+    <extnsn:resourceport>port</extnsn:resourceport> <!--Resource port -->
+    <extnsn:resourceusername>midpoint</extnsn:resourceusername> <!-- Resource name such as database name -->
+    <extnsn:resourcespecificname>dbname</extnsn:resourcespecificname> <!-- Used for a specific name such as database name if required -->
+    <extnsn:resourcesubname>dbschema</extnsn:resourcesubname> <!-- Used for a specific name such as database schema if required -->
+</extension>
+<!--If you wish to set the database password in plaintext to an initial value you can uncomment and place the element below. Normally you'd supply this in the GUI directly or via REST API call. -->
+<!-- <password>plaintext value here</password> -->
+</service>

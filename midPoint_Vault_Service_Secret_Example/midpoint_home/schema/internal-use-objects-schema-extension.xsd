@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!-- This is a runtime schema that defines data types used in the <extension> part of the objects.
+      The following are customizations made for internal midPoint use that don't extend schema for external systems/core business concerns -->
+
+<xsd:schema elementFormDefault="qualified"
+            targetNamespace="http://internal.myedu.local/xml/ns/midpoint/schema/extension-3"
+            xmlns:tns="http://internal.myedu.local/xml/ns/midpoint/schema/extension-3"
+            xmlns:a="http://prism.evolveum.com/xml/ns/public/annotation-3"
+            xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+
+    <!-- Extension on Service objects in midPoint for usage in passing secrets to resource objects from something like Hashicorp Vault -->
+    <xsd:complexType name="ServiceTypeExtensionType">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <a:extension ref="c:ServiceType"/>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="resourcehost" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <a:indexed>false</a:indexed>
+                        <a:displayName>External Resource Host</a:displayName>
+                        <a:displayOrder>10</a:displayOrder>
+                        <a:help>Use for external resource configuration host name of the external resource. Note typically required.</a:help>
+                        <a:emphasized>false</a:emphasized>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="resourceport" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <a:indexed>false</a:indexed>
+                        <a:displayName>External Resource Port</a:displayName>
+                        <a:displayOrder>11</a:displayOrder>
+                        <a:help>Use for external resource configuration port of the external resource. Note can be optional.</a:help>
+                        <a:emphasized>false</a:emphasized>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="resourceusername" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <a:indexed>false</a:indexed>
+                        <a:displayName>External Resource Username</a:displayName>
+                        <a:displayOrder>12</a:displayOrder>
+                        <a:help>Use for external resource configuration of an authorized user's name for the external resource. Note typically required.</a:help>
+                        <a:emphasized>false</a:emphasized>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="resourcespecificname" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <a:indexed>false</a:indexed>
+                        <a:displayName>External Resource Specific Name</a:displayName>
+                        <a:displayOrder>13</a:displayOrder>
+                        <a:help>Use for external resource configuration of a specific name such as database name of something on the external resource. Note typically database name or similar.</a:help>
+                        <a:emphasized>false</a:emphasized>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="resourcesubname" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <a:indexed>false</a:indexed>
+                        <a:displayName>External Resource Specific SubGroup Name</a:displayName>
+                        <a:displayOrder>13</a:displayOrder>
+                        <a:help>Use for external resource configuration of a specific name such as database schema of something on the external resource. Note typically database name or similar.</a:help>
+                        <a:emphasized>false</a:emphasized>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- Extension on Resource objects in midPoint for usage in passing secrets from service objects ultimately from the Hashicorp Vault -->
+    <xsd:complexType name="ResourceTypeExtensionType">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <a:extension ref="c:ResourceType"/>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="servicecredentialobjectname" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <a:indexed>false</a:indexed>
+                        <a:displayName>Internal midPoint Service Object Name</a:displayName>
+                        <a:displayOrder>3</a:displayOrder>
+                        <a:help>This should match an internal midPoint Service Object "name" field. The service object will have credentials and other external resource information.</a:help>
+                        <a:emphasized>false</a:emphasized>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>

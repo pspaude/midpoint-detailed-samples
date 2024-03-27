@@ -1,0 +1,73 @@
+<task xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3" 
+    xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3" 
+    xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3" 
+    xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3" 
+    xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3" 
+    xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3" 
+    xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    oid="63604fb1-065b-4e56-ad2f-f78e588f52f0">
+    <name>Inbound Grouper Memberships Reconciliation</name>
+    <assignment>
+        <targetRef oid="00000000-0000-0000-0000-000000000501" relation="org:default" type="c:ArchetypeType">
+            <!-- Reconciliation task -->
+        </targetRef>
+        <activation>
+            <effectiveStatus>enabled</effectiveStatus>
+        </activation>
+    </assignment>
+    <iteration>0</iteration>
+    <iterationToken/>
+    <archetypeRef oid="00000000-0000-0000-0000-000000000501" relation="org:default" type="c:ArchetypeType">
+        <!-- Reconciliation task -->
+    </archetypeRef>
+    <roleMembershipRef oid="00000000-0000-0000-0000-000000000501" relation="org:default" type="c:ArchetypeType">
+        <!-- Reconciliation task -->
+    </roleMembershipRef>
+    <ownerRef oid="00000000-0000-0000-0000-000000000002" relation="org:default" type="c:UserType">
+        <!-- administrator -->
+    </ownerRef>
+    <category>Reconciliation</category>
+    <objectRef oid="fb0bbf07-e33f-4ddd-85a1-16a7edc237f2" relation="org:default" type="c:ResourceType">
+        <!-- Inbound Grouper Groups Source -->
+    </objectRef>
+    <binding>loose</binding>
+    <executionState>runnable</executionState>
+    <schedulingState>ready</schedulingState>
+    <schedule>
+        <recurrence>recurring</recurrence>
+        <cronLikePattern>0 0 22 * * ? *</cronLikePattern> <!-- Consider to setting once a week after initial import?!? -->
+        <misfireAction>executeImmediately</misfireAction>
+    </schedule>
+    <activity>
+        <work>
+            <reconciliation>
+                <resourceObjects>
+                    <resourceRef oid="fb0bbf07-e33f-4ddd-85a1-16a7edc237f2" relation="org:default" type="c:ResourceType">
+                        <!-- Inbound Grouper Groups Source -->
+                    </resourceRef>
+                    <kind>account</kind>
+                    <objectclass>ri:AccountObjectClass</objectclass>
+                </resourceObjects>
+            </reconciliation>
+        </work>
+        <controlFlow>
+            <errorHandling>
+                <entry>
+                    <reaction>
+                        <retryLater>
+                            <initialInterval>PT30M</initialInterval>
+                            <nextInterval>PT1H</nextInterval>
+                            <retryLimit>2</retryLimit>
+                        </retryLater>
+                    </reaction>
+                </entry>
+            </errorHandling>
+        </controlFlow>
+        <distribution>
+            <workerThreads>40</workerThreads>
+        </distribution>
+        <!-- Execution Mode can be flipped to dry so that the changes are not applied -->
+        <executionMode>full</executionMode>
+    </activity>
+    </task>

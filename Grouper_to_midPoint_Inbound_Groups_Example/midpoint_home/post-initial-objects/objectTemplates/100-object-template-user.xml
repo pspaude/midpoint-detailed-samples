@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- Default Global User Object Template -->
+<objectTemplate xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+                xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                oid="50a11daf-bb7f-4a59-9d42-ce79f1721950">
+    <name>Default User/Identity Object Template</name>
+    <description>
+        This is a Global Default All User Object Template.
+        Note if not configured by Archetype, then this should be configured globally in SystemConfiguration as the default template policy for all User objects!
+    </description>
+
+    <mapping>
+        <name>Grouper Group Cleanup</name>
+        <description>
+            This mapping will remove assignments with grouper-grouper subtype for all users who don't have account linked on Grouper resource.
+            This is addressing the situation when a user account on Grouper resource is deleted and therefore is no longer synchronized.
+            Also, this will clean up all grouper-group assignments that shouldn't exist. We want such assignments exist only if they exists in Grouper resource.
+        </description>
+        <strength>strong</strength>
+        <expression>
+            <script>
+                <code>
+                    return null
+                </code>
+            </script>
+        </expression>
+        <target>
+            <path>assignment</path>
+            <set>
+                <condition>
+                    <script>
+                        <code>
+                            if(!midpoint.hasLinkedAccount('fb0bbf07-e33f-4ddd-85a1-16a7edc237f2')) {
+                                return assignment?.subtype?.contains('grouper-group')
+                            } else {
+                                return false
+                            }
+                        </code>
+                    </script>
+                </condition>
+            </set>
+        </target>
+    </mapping>
+
+</objectTemplate>

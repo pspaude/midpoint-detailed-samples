@@ -21,7 +21,11 @@ The problem is resources may be reloaded from source control (SCM) systems and t
 
 ## Brief Explanation
 
+This uses a service object created manually or automatically by an external service (REST API etc.) in each deployed midPoint environment. 
+The service object will hold the secrets and configuration for the resource object that can periodically change or changes per environment.
+The resource object can then be controlled by SCM without any secrets. 
+Additionally, the resource object(s) can be updated periodically with secrets without commits to SCM.
+The service objects only have to be created once per environment and in general conform to a specific specification. 
 
 
-
-The midPoint Service Object as a Secret Holder was funded and is used by Purdue University
+The midPoint Service Object as a Secret Holder was funded and is used by Purdue University and Unicon Inc.

@@ -19,4 +19,4 @@ See the Grouper_to_midPoint_Inbound_Groups_Example in this repo or the following
 * https://github.internet2.edu/docker/midPoint_container/tree/master/demo/grouper
 * https://github.internet2.edu/internet2/InCommonTAP-Examples/tree/main/Workbench
 
-The midPoint to Grouper Request Roles Process was funded and used by Virginia Tech. 
+The midPoint to Grouper Request Roles Process was funded and used by Virginia Tech and Unicon Inc. 

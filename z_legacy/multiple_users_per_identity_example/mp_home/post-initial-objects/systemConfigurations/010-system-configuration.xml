@@ -1,7 +1,0 @@
-<!-- NOTE Add to your existing System Configurations -->
-<defaultObjectPolicyConfiguration>
-    <objectTemplateRef oid="50a11daf-bb7f-4a59-9d42-ce79f1721950" relation="org:default" type="c:ObjectTemplateType">
-        <!-- Default User Template -->
-    </objectTemplateRef>
-    <type>c:UserType</type>
-</defaultObjectPolicyConfiguration>

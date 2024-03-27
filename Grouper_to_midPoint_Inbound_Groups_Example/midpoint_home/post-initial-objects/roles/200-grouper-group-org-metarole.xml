@@ -1,0 +1,84 @@
+<role xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:apti="http://midpoint.evolveum.com/xml/ns/public/common/api-types-3"
+      xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+      xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+      xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+      xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+      xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      oid="bcaec940-50c8-44bb-aa37-b2b5bb2d5b90">
+    <name>Grouper Provided Group MetaRole</name>
+    <description>A metarole for archetyped Grouper-provided groups to map: org (grouper group) -> role relationships in midPoint.</description>
+    <requestable>false</requestable>
+    <riskLevel>1</riskLevel>
+    <inducement>
+        <targetRef oid="36429e1d-5e70-464f-9338-28cb290e9ae8" type="c:RoleType"><!-- Some non-existent Employee Role TODO... this is just an example of a possible conditional assignment for a user that could be made --></targetRef>
+        <condition>
+            <expression>
+                <script>
+                     <code>
+                        def targetOid = focusAssignment?.getTargetRef()?.getOid()
+                        //TODO get Org assign identifier here and check if matches what we want from Grouper
+
+                        log.trace("Group Org Role Assign Employee|Faculty Comparing: " + targetOid + " with " + facultyOrgOid + ".")
+                        if (facultyOrgOid) {
+                            return (targetOid == facultyOrgOid)
+                        }
+                    </code>
+                </script>
+            </expression>
+        </condition>
+        <focusType>c:UserType</focusType>
+        <!--
+            Inducement order of 2 means these mappings are to be applied on org object, because the assignment structure is:
+                org -> archetype -> this-metarole
+         -->
+        <orderConstraint>
+            <orderMin>1</orderMin>
+            <orderMax>unbounded</orderMax>
+        </orderConstraint>
+    </inducement>
+    <inducement>
+        <construction>
+            <resourceRef oid="aee48676-5a50-4128-86e3-80d46f0022fa" relation="org:default" type="c:ResourceType">
+                <!-- Example non-existent Inbound/Outbound OpenLDAP group addition based on Grouper group. -->
+            </resourceRef>
+            <kind>entitlement</kind>
+            <intent>default</intent>
+        </construction>
+        <orderConstraint>
+            <orderMin>1</orderMin>
+            <orderMax>unbounded</orderMax>
+        </orderConstraint>
+        <focusType>OrgType</focusType>
+    </inducement>
+    <inducement>
+        <construction>
+            <resourceRef oid="aee48676-5a50-4128-86e3-80d46f0022fa" relation="org:default" type="c:ResourceType">
+                <!-- Example non-existent Inbound/Outbound OpenLDAP Person membership to group added above -->
+            </resourceRef>
+            <kind>account</kind>
+            <intent>default</intent>
+            <association>
+                <ref>ri:ldapGroup</ref>
+                <outbound>
+                    <strength>strong</strength>
+                    <expression>
+                        <associationFromLink>
+                            <projectionDiscriminator xsi:type="c:ShadowDiscriminatorType">
+                                <kind>entitlement</kind>
+                                <intent>default</intent>
+                            </projectionDiscriminator>
+                        </associationFromLink>
+                    </expression>
+                </outbound>
+            </association>
+        </construction>
+        <focusType>c:UserType</focusType>
+        <orderConstraint>
+            <orderMin>1</orderMin>
+            <orderMax>unbounded</orderMax>
+        </orderConstraint>
+    </inducement>
+</role>

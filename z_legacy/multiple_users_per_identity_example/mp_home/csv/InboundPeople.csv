@@ -1,6 +1,0 @@
-ID,FIRSTNAME,LASTNAME,EMAIL,BIRTHDATE,STATUS,PRIMARY_AFFILIATION,AFFILIATIONS,INTERNAL,EXTERNAL,PASSWORD
-testCsvOrig,testCsvOrigFirst,testCsvOrigLast,testCsvOrig@example.edu,04-05-1978,true,student,student;member;employee,false,false,password1
-test50,test50First,test50Last,test50@example.edu,04-04-1987,true,student,student,false,false,password1
-test60,test60First,test60Last,test60@example.edu,05-03-1933,true,faculty,faculty,true,false,password1
-test70,test70First,test70Last,test70@example.edu,05-02-1934,true,employee,employee,false,true,password1
-test80,test80First,test80Last,test80&@example.edu,05-12-1956,true,student,student,true,true,password1

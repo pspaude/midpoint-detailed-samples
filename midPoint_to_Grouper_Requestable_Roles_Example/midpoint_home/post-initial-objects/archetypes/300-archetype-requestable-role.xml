@@ -1,0 +1,81 @@
+<archetype xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+           xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+           xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+           xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+           xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+           xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+           xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           oid="496a0703-affb-421f-9285-c7d3cb12f55e">
+    <name>Grouper-Requestable-Role</name>
+    <archetypePolicy>
+        <display>
+            <label>Grouper Requestable Role</label>
+            <pluralLabel>Grouper Requestable Roles</pluralLabel>
+            <icon>
+                <cssClass>fa fa-inbox</cssClass>
+                <color>purple</color>
+            </icon>
+        </display>
+    </archetypePolicy>
+    <inducement>
+        <construction>
+            <resourceRef oid="31cef34a-8142-4c5a-bdc7-c769c7cfbba9" relation="org:default" type="c:ResourceType" />  <!-- Outbound Role Requests to Grouper -->
+            <kind>entitlement</kind>
+            <intent>default</intent>
+        </construction>
+        <orderConstraint>
+            <orderMin>1</orderMin>
+            <orderMax>unbounded</orderMax>
+        </orderConstraint>
+        <focusType>RoleType</focusType>
+    </inducement>
+    <inducement>
+        <construction>
+            <resourceRef oid="31cef34a-8142-4c5a-bdc7-c769c7cfbba9" relation="org:default" type="c:ResourceType" /> <!-- Grouper Request Registry -->
+            <kind>entitlement</kind>
+            <intent>default</intent>
+        </construction>
+        <orderConstraint>
+            <orderMin>1</orderMin>
+            <orderMax>unbounded</orderMax>
+        </orderConstraint>
+        <focusType>OrgType</focusType>
+    </inducement>
+    <inducement>
+        <construction>
+            <resourceRef oid="31cef34a-8142-4c5a-bdc7-c769c7cfbba9" relation="org:default" type="c:ResourceType" /> <!-- Grouper Request Registry -->
+            <kind>account</kind>
+            <intent>default</intent>
+            <association>
+                <ref>ri:grouperGroupMemberships</ref>
+                <outbound>
+                    <strength>strong</strength>
+                    <expression>
+                        <associationFromLink>
+                            <projectionDiscriminator xsi:type="c:ShadowDiscriminatorType">
+                                <kind>entitlement</kind>
+                                <intent>default</intent>
+                            </projectionDiscriminator>
+                        </associationFromLink>
+                    </expression>
+                </outbound>
+            </association>
+        </construction>
+        <condition>
+            <source>
+                <path>$focus/extension/grouperSubjectId</path>
+            </source>
+            <expression>
+                <script>
+                    <code>grouperSubjectId &amp;&amp; grouperSubjectId?.trim() != ""</code>
+                </script>
+            </expression>
+        </condition>
+        <orderConstraint>
+            <orderMin>1</orderMin>
+            <orderMax>unbounded</orderMax>
+        </orderConstraint>
+        <focusType>UserType</focusType>
+    </inducement>
+</archetype>

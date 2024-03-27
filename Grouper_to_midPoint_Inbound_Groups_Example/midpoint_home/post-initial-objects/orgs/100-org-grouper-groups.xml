@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<org xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+    oid="1f339075-5b2f-4a18-9c98-451f3eb0d28d">
+    <name>Grouper-Groups</name>
+    <displayName>Grouper Groups</displayName>
+    <description>Top Level Org for Grouper Groups</description>
+    <indestructible>true</indestructible>
+    <activation>
+        <administrativeStatus>enabled</administrativeStatus>
+    </activation>
+    <requestable>false</requestable>
+    <delegable>false</delegable>
+</org>

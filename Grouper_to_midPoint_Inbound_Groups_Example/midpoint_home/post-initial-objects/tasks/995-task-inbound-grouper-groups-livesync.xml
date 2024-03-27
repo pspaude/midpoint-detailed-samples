@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+      xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+      xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+      xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+      xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      oid="552112fc-9546-4e63-a170-339d99a3455e">
+    <name>Grouper Livesync</name>
+    <description>Grouper live synchronization task for groups and users.</description>
+    <indestructible>true</indestructible>
+    <assignment>
+        <targetRef oid="00000000-0000-0000-0000-000000000504" relation="org:default" type="c:ArchetypeType">
+            <!-- Live synchronization task -->
+        </targetRef>
+    </assignment>
+    <category>Recomputation</category>
+    <executionState>runnable</executionState>
+    <schedule>
+        <recurrence>recurring</recurrence>
+        <interval>60</interval>
+    </schedule>
+    <activity>
+        <work>
+            <liveSynchronization>
+                <resourceObjects>
+                    <resourceRef oid="fb0bbf07-e33f-4ddd-85a1-16a7edc237f2" relation="org:default" type="c:ResourceType" />
+                </resourceObjects>
+            </liveSynchronization>
+        </work>
+        <controlFlow>
+            <errorHandling>
+                <entry>
+                    <reaction>
+                        <retryLater>
+                            <initialInterval>PT30M</initialInterval>
+                            <nextInterval>PT1H</nextInterval>
+                            <retryLimit>2</retryLimit>
+                        </retryLater>
+                    </reaction>
+                </entry>
+            </errorHandling>
+        </controlFlow>
+    </activity>
+</task>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!-- Default Role Object Template -->
+<objectTemplate xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+                xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                oid="8bf9c2c4-a458-457a-a36b-fe57e6c351c4">
+    <name>Default Role Object Template</name>
+    <description>
+        This is a Global Default Role Object Template
+    </description>
+
+    <!-- Assign Requestable Role Archetype which assigns to Grouper Request Resource and sends to Grouper. -->
+    <mapping>
+        <name>Requestable Role Mapping</name>
+        <strength>strong</strength>
+        <source>
+            <path>$focus/costCenter</path>
+        </source>
+        <expression>
+            <assignmentTargetSearch>
+                <targetType>ArchetypeType</targetType>
+                <oid>496a0703-affb-421f-9285-c7d3cb12f55e</oid>
+            </assignmentTargetSearch>
+        </expression>
+        <target>
+            <path>assignment</path>
+        </target>
+        <condition>
+            <script>
+                <code>
+                    costCenter?.trim()?.equalsIgnoreCase("mp_to_grouper_request_role")
+                </code>
+            </script>
+        </condition>
+        <enabled>true</enabled>
+    </mapping>
+
+</objectTemplate>

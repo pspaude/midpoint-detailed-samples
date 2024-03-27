@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!-- Default Global Service Object Template -->
+<objectTemplate xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+                xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+                oid="7d595388-6b38-4c04-abea-fe8b6a3633a6">
+    <name>Default Service Object Template</name>
+    <description>
+        This is a Global Default All Service Object Template. It should be configured for all Service Objects as a policy in System Configuration object.
+    </description>
+
+    <!-- Assign Service Integration Archetype for use by Services to supply credentials to Resources -->
+    <mapping>
+        <name>Service Resource Secret from Vault Holder Assignment</name>
+        <strength>strong</strength>
+        <source>
+            <path>$focus/identifier</path>
+        </source>
+        <expression>
+            <assignmentTargetSearch>
+                <targetType>ArchetypeType</targetType>
+                <oid>7b1195cb-ec37-487e-ad14-c79c59e559b5</oid>
+            </assignmentTargetSearch>
+        </expression>
+        <target>
+            <path>assignment</path>
+        </target>
+        <condition>
+            <script>
+                <code>
+                    return basic.stringify(identifier)?.trim()?.equalsIgnoreCase("midpoint-integration-service")
+                </code>
+            </script>
+        </condition>
+        <enabled>true</enabled>
+    </mapping>
+</objectTemplate>
